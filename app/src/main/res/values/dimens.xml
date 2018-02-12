@@ -1,0 +1,12 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="rect_border_width">1dp</dimen>
+    <dimen name="et_side_padding">12dp</dimen>
+    <dimen name="et_padding">6dp</dimen>
+
+    <!--number picker-->
+    <dimen name="number_picker_width">40dp</dimen>
+    <dimen name="number_picker_hight">120dp</dimen>
+    <dimen name="number_picker_margin">2dp</dimen>
+</resources>
