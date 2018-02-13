@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.sql.SQLData;
+
 /**
  * Created by ahmed on 13/02/2018.
  */
@@ -132,11 +134,48 @@ public class NotesProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        final SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        int numberOfDeletedRows;
+        switch (match) {
+            case NOTE_WITH_ID:
+                String id = uri.getPathSegments().get(1);
+                String mSelection = NotesContract.NoteEntry._ID + "=?";
+                String[] mSelectionArgs = new String[]{id};
+                numberOfDeletedRows = db.delete(NotesContract.NoteEntry.TABLE_NAME,
+                        mSelection,
+                        mSelectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        return numberOfDeletedRows;
     }
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        final SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        int numberOfUpdatedRows;
+        switch (match) {
+            case NOTE_WITH_ID:
+                String id = uri.getPathSegments().get(1);
+                String mSelection = NotesContract.NoteEntry._ID + "=?";
+                String[] mSelectionArgs = new String[]{id};
+                numberOfUpdatedRows = db.update(NotesContract.NoteEntry.TABLE_NAME,
+                        values,
+                        mSelection,
+                        mSelectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        
+        return numberOfUpdatedRows;
     }
 }
