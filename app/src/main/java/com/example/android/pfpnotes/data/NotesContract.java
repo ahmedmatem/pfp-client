@@ -19,6 +19,9 @@ public final class NotesContract {
     }
 
     public static class NoteEntry implements BaseColumns {
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.com.example.pfpnotes.notes";
+        public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.com.example.pfpnotes.notes";
+
         public static final String TABLE_NAME = "notes";
         public static final String COLUMN_PLACE = "place";
         public static final String COLUMN_SHAPE = "shape";

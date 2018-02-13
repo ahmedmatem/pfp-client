@@ -89,7 +89,17 @@ public class NotesProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case NOTES:
+                return NotesContract.NoteEntry.CONTENT_TYPE;
+            case NOTE_WITH_ID:
+                return NotesContract.NoteEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        //return null;
     }
 
     @Nullable
