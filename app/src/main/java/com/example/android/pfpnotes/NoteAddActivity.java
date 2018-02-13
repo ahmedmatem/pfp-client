@@ -7,16 +7,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.example.android.pfpnotes.data.PlaceAdapter;
-import com.example.android.pfpnotes.data.ShapeSpinnerAdapter;
+import com.example.android.pfpnotes.adapters.PlaceAdapter;
+import com.example.android.pfpnotes.adapters.ShapeSpinnerAdapter;
 import com.example.android.pfpnotes.ui.NumberPickerFragment;
 
 public class NoteAddActivity extends AppCompatActivity

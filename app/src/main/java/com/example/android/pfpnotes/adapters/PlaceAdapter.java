@@ -1,4 +1,4 @@
-package com.example.android.pfpnotes.data;
+package com.example.android.pfpnotes.adapters;
 
 import android.content.Context;
 import android.view.Gravity;
