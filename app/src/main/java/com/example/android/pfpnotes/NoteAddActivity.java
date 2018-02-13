@@ -1,8 +1,11 @@
 package com.example.android.pfpnotes;
 
+import android.content.ContentValues;
+import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,27 +15,34 @@ import android.widget.GridView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.pfpnotes.adapters.PlaceAdapter;
 import com.example.android.pfpnotes.adapters.ShapeSpinnerAdapter;
+import com.example.android.pfpnotes.asynctasks.SaveData;
+import com.example.android.pfpnotes.data.NotesContract;
 import com.example.android.pfpnotes.ui.NumberPickerFragment;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class NoteAddActivity extends AppCompatActivity
-        implements NumberPickerFragment.OnFragmentInteractionListener {
+        implements NumberPickerFragment.OnFragmentInteractionListener, SaveData.OnDataSaved {
     private static final String TAG = "NoteAddActivity";
     private int mGridViewClickedItemPosition = -1;
 
     private FragmentManager mFragmentManager;
 
     private NumberPickerFragment mWidth;
-    private NumberPickerFragment mHight;
+    private NumberPickerFragment mHeight;
     private TextView mSummary;
     private Switch mSwitchTwoSkin;
 
     private boolean isDone = false; // indicate whether "done" action button is visible
     private boolean isPlaceSelected = false;
     private boolean isTwoSkinChecked = false;
-    private String mSummaryTextPlace;
+    private String mPlace;
     private int mSpinnerSelectedItemPosition;
 
     @Override
@@ -58,7 +68,7 @@ public class NoteAddActivity extends AppCompatActivity
                 TextView currentClickedItem = (TextView) parent.getChildAt(position);
                 refreshGridView(prevClickedItem, currentClickedItem);
 
-                mSummaryTextPlace = currentClickedItem.getText().toString();
+                mPlace = currentClickedItem.getText().toString();
 
                 mGridViewClickedItemPosition = position;
 
@@ -67,11 +77,8 @@ public class NoteAddActivity extends AppCompatActivity
         });
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
-//        ArrayAdapter<String> data = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_spinner_dropdown_item,
-//                new String[]{"Hole", "Line"});
-        ShapeSpinnerAdapter spinnerAdapter = new ShapeSpinnerAdapter(this);
-        spinner.setAdapter(spinnerAdapter);
+        ShapeSpinnerAdapter adapter = new ShapeSpinnerAdapter(this);
+        spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -88,7 +95,7 @@ public class NoteAddActivity extends AppCompatActivity
         mFragmentManager = getSupportFragmentManager();
         mWidth = (NumberPickerFragment) mFragmentManager
                 .findFragmentById(R.id.width_number_picker);
-        mHight = (NumberPickerFragment) mFragmentManager
+        mHeight = (NumberPickerFragment) mFragmentManager
                 .findFragmentById(R.id.hight_number_picker);
 
         mSwitchTwoSkin = (Switch) findViewById(R.id.switch_two_skin);
@@ -109,13 +116,13 @@ public class NoteAddActivity extends AppCompatActivity
         switch (mSpinnerSelectedItemPosition) {
             case 0: // Hole
                 mFragmentManager.beginTransaction()
-                        .show(mHight)
+                        .show(mHeight)
                         .commit();
                 mSwitchTwoSkin.setVisibility(View.VISIBLE);
 
                 if (isPlaceSelected &&
                         mWidth.getNumber() != 0 &&
-                        mHight.getNumber() != 0) {
+                        mHeight.getNumber() != 0) {
                     isDone = true;
                 } else {
                     isDone = false;
@@ -123,7 +130,7 @@ public class NoteAddActivity extends AppCompatActivity
                 break;
             case 1: // Line
                 mFragmentManager.beginTransaction()
-                        .hide(mHight)
+                        .hide(mHeight)
                         .commit();
                 mSwitchTwoSkin.setVisibility(View.GONE);
 
@@ -144,18 +151,18 @@ public class NoteAddActivity extends AppCompatActivity
     private void updateSummary() {
         if (isDone) {
             StringBuilder summaryText = new StringBuilder();
-            summaryText.append(mSummaryTextPlace + ", ");
+            summaryText.append(mPlace + ", ");
             summaryText.append(mWidth.getNumber());
             if(mSpinnerSelectedItemPosition == 0){ // hole
                 summaryText.append(" x ");
-                summaryText.append(mHight.getNumber());
+                summaryText.append(mHeight.getNumber());
                 if(isTwoSkinChecked){
                     summaryText.append(" x 2");
                 }
                 summaryText.append(" (cm)");
                 // add square line
                 summaryText.append("\n");
-                double s = mWidth.getNumber() * mHight.getNumber();
+                double s = mWidth.getNumber() * mHeight.getNumber();
                 summaryText.append("S = " + s / 10000 + " (m2)");
                 // add price line
                 summaryText.append("\n");
@@ -181,10 +188,28 @@ public class NoteAddActivity extends AppCompatActivity
         int itemId = item.getItemId();
         switch (itemId) {
             case R.id.action_done:
+                saveData();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveData() {
+        ContentValues values = new ContentValues();
+        values.put(NotesContract.NoteEntry.COLUMN_PLACE, mPlace);
+        values.put(NotesContract.NoteEntry.COLUMN_SHAPE, mSpinnerSelectedItemPosition);
+        values.put(NotesContract.NoteEntry.COLUMN_WIDTH, mWidth.getNumber());
+        if(mSpinnerSelectedItemPosition == 0) { // rectangle shape
+            values.put(NotesContract.NoteEntry.COLUMN_HEIGHT, mHeight.getNumber());
+            if(isTwoSkinChecked){
+                values.put(NotesContract.NoteEntry.COLUMN_SKIN, 2);
+            }
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("DD/MM/YYYY HH:MM");
+        String date = simpleDateFormat.format(new Date());
+        values.put(NotesContract.NoteEntry.COLUMN_PUBLISHED_DATE, date);
+        new SaveData(this).execute(values);
     }
 
     @Override
@@ -203,5 +228,10 @@ public class NoteAddActivity extends AppCompatActivity
     @Override
     public void onNumberPickerValueChanged() {
         updateUI();
+    }
+
+    @Override
+    public void onDataSaved(Uri uri) {
+        Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show();
     }
 }
