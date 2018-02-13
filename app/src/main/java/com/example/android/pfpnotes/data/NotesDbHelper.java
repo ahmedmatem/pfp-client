@@ -8,11 +8,11 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by ahmed on 13/02/2018.
  */
 
-public class NotesDatabase extends SQLiteOpenHelper {
+public class NotesDbHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "pfpnotes.db";
     public static final int DATABASE_VERSION = 1;
 
-    public NotesDatabase(Context context) {
+    public NotesDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

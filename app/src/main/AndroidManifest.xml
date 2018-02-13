@@ -28,6 +28,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.pfpnotes.NoteListActivity"/>
         </activity>
+
+        <!--register content provider-->
+        <provider
+            android:authorities="com.example.android.pfpnotes"
+            android:name=".data.NotesProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>
