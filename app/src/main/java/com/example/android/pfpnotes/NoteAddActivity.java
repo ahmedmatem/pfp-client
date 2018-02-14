@@ -21,6 +21,8 @@ import com.example.android.pfpnotes.adapters.PlaceAdapter;
 import com.example.android.pfpnotes.adapters.ShapeSpinnerAdapter;
 import com.example.android.pfpnotes.asynctasks.SaveData;
 import com.example.android.pfpnotes.data.NotesContract;
+import com.example.android.pfpnotes.data.PriceList;
+import com.example.android.pfpnotes.models.Interval;
 import com.example.android.pfpnotes.ui.NumberPickerFragment;
 
 import java.text.SimpleDateFormat;
@@ -101,12 +103,12 @@ public class NoteAddActivity extends AppCompatActivity
         mSwitchTwoSkin = (Switch) findViewById(R.id.switch_two_skin);
         mSwitchTwoSkin.setOnCheckedChangeListener(
                 new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                isTwoSkinChecked = isChecked;
-                updateUI();
-            }
-        });
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        isTwoSkinChecked = isChecked;
+                        updateUI();
+                    }
+                });
 
         mSummary = (TextView) findViewById(R.id.tv_summary);
 
@@ -153,20 +155,27 @@ public class NoteAddActivity extends AppCompatActivity
             StringBuilder summaryText = new StringBuilder();
             summaryText.append(mPlace + ", ");
             summaryText.append(mWidth.getNumber());
-            if(mSpinnerSelectedItemPosition == 0){ // hole
+            if (mSpinnerSelectedItemPosition == 0) { // hole
                 summaryText.append(" x ");
                 summaryText.append(mHeight.getNumber());
-                if(isTwoSkinChecked){
+                if (isTwoSkinChecked) {
                     summaryText.append(" x 2");
                 }
                 summaryText.append(" (cm)");
                 // add square line
                 summaryText.append("\n");
-                double s = mWidth.getNumber() * mHeight.getNumber();
-                summaryText.append("S = " + s / 10000 + " (m2)");
+                double s_cm2 = mWidth.getNumber() * mHeight.getNumber(); // cm2
+                summaryText.append("S = " + (s_cm2 / 10000) + " (m2)"); // cm2 -> m2
                 // add price line
                 summaryText.append("\n");
-                summaryText.append("Price: " + "price goes here");
+                Interval interval = PriceList.getIntervalContains(s_cm2 / 10000); // cm2 - > m2
+                if (interval != null) {
+                    double price = interval.getPrice();
+                    if(PriceList.isLastInterval(price)) {
+                        price *= s_cm2 / 10000;
+                    }
+                    summaryText.append("Price: £" + String.format("%.2f", price));
+                }
             } else { // line
                 summaryText.append(" (cm)");
             }
@@ -200,9 +209,9 @@ public class NoteAddActivity extends AppCompatActivity
         values.put(NotesContract.NoteEntry.COLUMN_PLACE, mPlace);
         values.put(NotesContract.NoteEntry.COLUMN_SHAPE, mSpinnerSelectedItemPosition);
         values.put(NotesContract.NoteEntry.COLUMN_WIDTH, mWidth.getNumber());
-        if(mSpinnerSelectedItemPosition == 0) { // rectangle shape
+        if (mSpinnerSelectedItemPosition == 0) { // rectangle shape
             values.put(NotesContract.NoteEntry.COLUMN_HEIGHT, mHeight.getNumber());
-            if(isTwoSkinChecked){
+            if (isTwoSkinChecked) {
                 values.put(NotesContract.NoteEntry.COLUMN_SKIN, 2);
             }
         }

@@ -11,9 +11,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
-
-import java.sql.SQLData;
 
 /**
  * Created by ahmed on 13/02/2018.
@@ -40,8 +37,7 @@ public class NotesProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        Context context = getContext();
-        mDbHelper = new NotesDbHelper(context);
+        mDbHelper = new NotesDbHelper(getContext());
         return true;
     }
 
@@ -86,7 +82,7 @@ public class NotesProvider extends ContentProvider {
             returnCursor.setNotificationUri(getContext().getContentResolver(), uri);
         }
 
-        return null;
+        return returnCursor;
     }
 
     @Nullable
@@ -101,8 +97,6 @@ public class NotesProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-
-        //return null;
     }
 
     @Nullable
@@ -119,7 +113,7 @@ public class NotesProvider extends ContentProvider {
                 if (id > 0) {
                     // success
                     returnUri = ContentUris.withAppendedId(
-                            NotesContract.CONTENT_URI, id);
+                            NotesContract.BASE_CONTENT_URI, id);
                 } else {
                     throw new SQLException("Failed to insert row into " + uri);
                 }

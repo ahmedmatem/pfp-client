@@ -16,7 +16,7 @@ import java.lang.reflect.Field;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
+ * Activities that contains this fragment must implement the
  * {@link NumberPickerFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link NumberPickerFragment#newInstance} factory method to
@@ -165,7 +165,7 @@ public class NumberPickerFragment extends Fragment implements NumberPicker.OnVal
     }
 
     /**
-     * This interface must be implemented by activities that contain this
+     * This interface must be implemented by activities that contains this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.

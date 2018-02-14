@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.example.android.pfpnotes.data.NotesContract;
 
@@ -29,7 +28,7 @@ public class SaveData extends AsyncTask<ContentValues, Void, Uri> {
     protected Uri doInBackground(ContentValues... cvs) {
         ContentValues values = cvs[0];
         Uri uri = mContext.getContentResolver()
-                .insert(NotesContract.NoteEntry.BASE_URI, values);
+                .insert(NotesContract.NoteEntry.CONTENT_URI, values);
         return uri;
     }
 

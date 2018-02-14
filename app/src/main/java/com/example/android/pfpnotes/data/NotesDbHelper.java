@@ -12,7 +12,7 @@ import android.util.Log;
 public class NotesDbHelper extends SQLiteOpenHelper {
     private static final String TAG = "NotesDbHelper";
     public static final String DATABASE_NAME = "pfpnotes.db";
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 4;
 
     public NotesDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -28,8 +28,8 @@ public class NotesDbHelper extends SQLiteOpenHelper {
                 NotesContract.NoteEntry.COLUMN_WIDTH + " REAL NOT NULL DEFAULT 0," +
                 NotesContract.NoteEntry.COLUMN_HEIGHT + " REAL NOT NULL DEFAULT 0," +
                 NotesContract.NoteEntry.COLUMN_SKIN + " INTEGER NOT NULL DEFAULT 1," +
+                NotesContract.NoteEntry.COLUMN_PRICE + " REAL NOT NULL," +
                 NotesContract.NoteEntry.COLUMN_PUBLISHED_DATE + " TEXT NOT NULL)";
-        Log.d(TAG, "onCreate: " + SQL_CREATE_NOTES_TABLE);
 
         db.execSQL(SQL_CREATE_NOTES_TABLE);
 

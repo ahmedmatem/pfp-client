@@ -15,8 +15,8 @@ import com.example.android.pfpnotes.R;
 
 public class PlaceAdapter extends BaseAdapter {
     private static final String[] places = new String[]{
-            "L-1", "L0", "L1", "L2", "L3", "L4", "L5",
-            "S-1", "S0", "S1", "S2", "S3", "S4", "S5"
+            "B", "GF", "L1", "L2", "L3", "L4", "L5",
+            "SB", "SGF", "S1", "S2", "S3", "S4", "S5"
     };
 
     private Context mContext;
