@@ -56,8 +56,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
 
         String place = mCursor.getString(mCursor.getColumnIndex(
                 NotesContract.NoteEntry.COLUMN_PLACE));
-        double width = mCursor.getDouble(mCursor.getColumnIndex(NotesContract.NoteEntry.COLUMN_WIDTH));
-        double height = mCursor.getDouble(mCursor.getColumnIndex(NotesContract.NoteEntry.COLUMN_HEIGHT));
+        int width = mCursor.getInt(mCursor.getColumnIndex(NotesContract.NoteEntry.COLUMN_WIDTH));
+        int height = mCursor.getInt(mCursor.getColumnIndex(NotesContract.NoteEntry.COLUMN_HEIGHT));
         int skin = mCursor.getInt(mCursor.getColumnIndex(NotesContract.NoteEntry.COLUMN_SKIN));
 
         StringBuilder note = new StringBuilder();
@@ -71,6 +71,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
         note.append(" (cm)");
 
         holder.mNote.setText(note.toString());
+        double price = mCursor.getDouble(mCursor.getColumnIndex(
+                NotesContract.NoteEntry.COLUMN_PRICE));
+        holder.mPrice.setText(String.format("£%.2f", price));
     }
 
     @Override

@@ -46,6 +46,7 @@ public class NoteAddActivity extends AppCompatActivity
     private boolean isTwoSkinChecked = false;
     private String mPlace;
     private int mSpinnerSelectedItemPosition;
+    private double mPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,11 +171,14 @@ public class NoteAddActivity extends AppCompatActivity
                 summaryText.append("\n");
                 Interval interval = PriceList.getIntervalContains(s_cm2 / 10000); // cm2 - > m2
                 if (interval != null) {
-                    double price = interval.getPrice();
-                    if(PriceList.isLastInterval(price)) {
-                        price *= s_cm2 / 10000;
+                    mPrice = interval.getPrice();
+                    if(PriceList.isLastInterval(mPrice)) {
+                        mPrice *= s_cm2 / 10000;
                     }
-                    summaryText.append("Price: £" + String.format("%.2f", price));
+                    if(isTwoSkinChecked){
+                        mPrice *= 2;
+                    }
+                    summaryText.append("Price: £" + String.format("%.2f", mPrice));
                 }
             } else { // line
                 summaryText.append(" (cm)");
@@ -215,6 +219,7 @@ public class NoteAddActivity extends AppCompatActivity
                 values.put(NotesContract.NoteEntry.COLUMN_SKIN, 2);
             }
         }
+        values.put(NotesContract.NoteEntry.COLUMN_PRICE, mPrice);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("DD/MM/YYYY HH:MM");
         String date = simpleDateFormat.format(new Date());
         values.put(NotesContract.NoteEntry.COLUMN_PUBLISHED_DATE, date);
