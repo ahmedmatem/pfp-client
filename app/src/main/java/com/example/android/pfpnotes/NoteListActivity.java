@@ -16,17 +16,20 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.android.pfpnotes.adapters.NotesAdapter;
 import com.example.android.pfpnotes.data.NotesContract;
 
 public class NoteListActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
+
     private static final int NOTE_LIST_LOADER = 0x01;
 
     private static final String TAG = "NoteListActivity";
 
     private RecyclerView mRecyclerView;
+    private TextView mInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,8 @@ public class NoteListActivity extends AppCompatActivity
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_notes);
         getSupportLoaderManager().initLoader(NOTE_LIST_LOADER, null, this);
+
+        mInfo = (TextView) findViewById(R.id.tv_info);
 
     }
 
@@ -93,6 +98,23 @@ public class NoteListActivity extends AppCompatActivity
         mRecyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
+
+        updateUi(data);
+    }
+
+    private void updateUi(Cursor cursor) {
+        Double total = calculateTotalPrice(cursor);
+        mInfo.setText(String.format("£%.2f", total));
+    }
+
+    private Double calculateTotalPrice(Cursor cursor) {
+        double total = 0;
+        String price;
+        while (cursor.moveToNext()){
+            price = cursor.getString(cursor.getColumnIndex(NotesContract.NoteEntry.COLUMN_PRICE));
+            total += Double.valueOf(price);
+        }
+        return total;
     }
 
     @Override

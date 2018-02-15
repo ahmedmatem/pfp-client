@@ -8,4 +8,6 @@
     <color name="pink_100">#FCE4EC</color>
 
     <color name="rectBorderColor">#CDCDCD</color>
+
+    <color name="list_divider">#eee</color>
 </resources>
