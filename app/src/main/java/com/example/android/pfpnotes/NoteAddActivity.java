@@ -1,7 +1,9 @@
 package com.example.android.pfpnotes;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +25,7 @@ import com.example.android.pfpnotes.asynctasks.SaveData;
 import com.example.android.pfpnotes.data.NotesContract;
 import com.example.android.pfpnotes.data.PriceList;
 import com.example.android.pfpnotes.models.Interval;
+import com.example.android.pfpnotes.ui.NoteSaveDialogFragment;
 import com.example.android.pfpnotes.ui.NumberPickerFragment;
 
 import java.text.SimpleDateFormat;
@@ -30,7 +33,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class NoteAddActivity extends AppCompatActivity
-        implements NumberPickerFragment.OnFragmentInteractionListener, SaveData.OnDataSaved {
+        implements NumberPickerFragment.OnFragmentInteractionListener, SaveData.OnDataSaved{
     private static final String TAG = "NoteAddActivity";
     private int mGridViewClickedItemPosition = -1;
 
@@ -172,16 +175,19 @@ public class NoteAddActivity extends AppCompatActivity
                 Interval interval = PriceList.getIntervalContains(s_cm2 / 10000); // cm2 - > m2
                 if (interval != null) {
                     mPrice = interval.getPrice();
-                    if(PriceList.isLastInterval(mPrice)) {
+                    if (PriceList.isLastInterval(mPrice)) {
                         mPrice *= s_cm2 / 10000;
                     }
-                    if(isTwoSkinChecked){
+                    if (isTwoSkinChecked) {
                         mPrice *= 2;
                     }
                     summaryText.append("Price: £" + String.format("%.2f", mPrice));
                 }
             } else { // line
                 summaryText.append(" (cm)");
+                summaryText.append("\n");
+                mPrice = Double.valueOf(mWidth.getNumber()) / 100; // sm -> m
+                summaryText.append("Price: £" + String.format("%.2f", mPrice));
             }
             mSummary.setText(summaryText.toString());
             mSummary.setVisibility(View.VISIBLE);
@@ -246,6 +252,10 @@ public class NoteAddActivity extends AppCompatActivity
 
     @Override
     public void onDataSaved(Uri uri) {
-        Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.note_successfully_added, Toast.LENGTH_SHORT).show();
+//        crate dialog
+//        new NoteSaveDialogFragment().show(getSupportFragmentManager(), "note_save");
+        Intent intent = new Intent(this, NoteListActivity.class);
+        startActivity(intent);
     }
 }

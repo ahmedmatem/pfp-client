@@ -9,4 +9,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="text_two_skin">Two skin</string>
     <string name="description_shape">shape</string>
+    <string name="fragment_implementation_alert">The dialog host class must implement NoticeDialogListener</string>
+    <string name="btn_cancel">cancel</string>
+    <string name="btn_add_more_notes">add more notes</string>
+    <string name="note_successfully_added">Note was added successfully!</string>
 </resources>

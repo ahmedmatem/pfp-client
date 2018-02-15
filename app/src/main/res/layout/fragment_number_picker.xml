@@ -10,18 +10,15 @@
     <NumberPicker
         android:id="@+id/number_picker_meter"
         android:layout_width="@dimen/number_picker_width"
-        android:layout_height="@dimen/number_picker_hight"
-        android:layout_margin="@dimen/number_picker_margin"/>
+        android:layout_height="@dimen/number_picker_hight"/>
 
     <NumberPicker
         android:id="@+id/number_picker_decimeter"
         android:layout_width="@dimen/number_picker_width"
-        android:layout_height="@dimen/number_picker_hight"
-        android:layout_margin="@dimen/number_picker_margin"/>
+        android:layout_height="@dimen/number_picker_hight"/>
 
     <NumberPicker
         android:id="@+id/number_picker_centimeter"
         android:layout_width="@dimen/number_picker_width"
-        android:layout_height="@dimen/number_picker_hight"
-        android:layout_margin="@dimen/number_picker_margin"/>
+        android:layout_height="@dimen/number_picker_hight"/>
 </LinearLayout>
