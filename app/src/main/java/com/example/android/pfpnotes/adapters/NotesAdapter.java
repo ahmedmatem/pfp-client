@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.pfpnotes.R;
+import com.example.android.pfpnotes.data.Data;
 import com.example.android.pfpnotes.data.NotesContract;
 
 /**
@@ -56,21 +57,25 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
 
         String place = mCursor.getString(mCursor.getColumnIndex(
                 NotesContract.NoteEntry.COLUMN_PLACE));
+        String placeName = Data.getPlaceName(place);
+        if(placeName != null) {
+            holder.mPlace.setText(placeName);
+        }
         int width = mCursor.getInt(mCursor.getColumnIndex(NotesContract.NoteEntry.COLUMN_WIDTH));
         int height = mCursor.getInt(mCursor.getColumnIndex(NotesContract.NoteEntry.COLUMN_HEIGHT));
         int skin = mCursor.getInt(mCursor.getColumnIndex(NotesContract.NoteEntry.COLUMN_SKIN));
 
-        StringBuilder note = new StringBuilder();
-        note.append(place + ", " + width);
+        StringBuilder size = new StringBuilder();
+        size.append(width);
         if (shape == 0) { // rectangle
-            note.append(" x " + height);
+            size.append(" x " + height);
             if (skin == 2) {
-                note.append(" x 2 ");
+                size.append(" x 2 ");
             }
         }
-        note.append(" (cm)");
+        size.append(" (cm)");
 
-        holder.mNote.setText(note.toString());
+        holder.mSize.setText(size.toString());
         double price = mCursor.getDouble(mCursor.getColumnIndex(
                 NotesContract.NoteEntry.COLUMN_PRICE));
         holder.mPrice.setText(String.format("£%.2f", price));

@@ -13,13 +13,15 @@ import com.example.android.pfpnotes.R;
 
 public class NoteViewHolder extends RecyclerView.ViewHolder {
     public ImageView mShape;
-    public TextView mNote;
+    public TextView mPlace;
+    public TextView mSize;
     public TextView mPrice;
 
     public NoteViewHolder(View itemView) {
         super(itemView);
         mShape = (ImageView) itemView.findViewById(R.id.iv_shape);
-        mNote = (TextView) itemView.findViewById(R.id.tv_note);
+        mPlace = (TextView) itemView.findViewById(R.id.tv_place);
+        mSize = (TextView) itemView.findViewById(R.id.tv_size);
         mPrice = (TextView) itemView.findViewById(R.id.tv_price);
     }
 }
