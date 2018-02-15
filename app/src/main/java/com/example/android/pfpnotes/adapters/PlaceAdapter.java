@@ -8,15 +8,28 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.android.pfpnotes.R;
+import com.example.android.pfpnotes.models.Place;
 
 /**
  * Created by ahmed on 10/02/2018.
  */
 
 public class PlaceAdapter extends BaseAdapter {
-    private static final String[] places = new String[]{
-            "B", "GF", "L1", "L2", "L3", "L4", "L5",
-            "SB", "SGF", "S1", "S2", "S3", "S4", "S5"
+    private static final Place[] sPlaces = new Place[]{
+            new Place("Basement", "B"),
+            new Place("Ground floor", "GF"),
+            new Place("Level 1", "L1"),
+            new Place("Level 2", "L2"),
+            new Place("Level 3", "L3"),
+            new Place("Level 4", "L4"),
+            new Place("Level 5", "L5"),
+            new Place("Stairs Basement", "SB"),
+            new Place("Stairs Ground", "SG"),
+            new Place("Stairs 1", "S1"),
+            new Place("Stairs 2", "S2"),
+            new Place("Stairs 3", "S3"),
+            new Place("Stairs 4", "S4"),
+            new Place("Stairs 5", "S5"),
     };
 
     private Context mContext;
@@ -27,7 +40,7 @@ public class PlaceAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return places.length;
+        return sPlaces.length;
     }
 
     @Override
@@ -54,7 +67,7 @@ public class PlaceAdapter extends BaseAdapter {
                 .LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 140));
         place.setBackground(mContext.getResources()
                 .getDrawable(R.drawable.rect_border));
-        place.setText(places[position]);
+        place.setText(sPlaces[position].getShortName());
 
         return place;
     }
