@@ -226,7 +226,7 @@ public class NoteAddActivity extends AppCompatActivity
             }
         }
         values.put(NotesContract.NoteEntry.COLUMN_PRICE, mPrice);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("DD/MM/YYYY HH:MM");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.date_format));
         String date = simpleDateFormat.format(new Date());
         values.put(NotesContract.NoteEntry.COLUMN_PUBLISHED_DATE, date);
         new SaveData(this).execute(values);

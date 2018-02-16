@@ -1,6 +1,5 @@
 package com.example.android.pfpnotes;
 
-import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -20,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.android.pfpnotes.adapters.NotesAdapter;
 import com.example.android.pfpnotes.data.NotesContract;
+import com.example.android.pfpnotes.helpers.TextHelper;
 
 public class NoteListActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -28,8 +28,10 @@ public class NoteListActivity extends AppCompatActivity
 
     private static final String TAG = "NoteListActivity";
 
+    private TextView mDate;
+    private TextView mTotalPerDay;
+
     private RecyclerView mRecyclerView;
-    private TextView mInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +49,11 @@ public class NoteListActivity extends AppCompatActivity
             }
         });
 
+        mDate = (TextView) findViewById(R.id.tv_date);
+        mTotalPerDay = (TextView) findViewById(R.id.tv_total);
+
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_notes);
         getSupportLoaderManager().initLoader(NOTE_LIST_LOADER, null, this);
-
-        mInfo = (TextView) findViewById(R.id.tv_info);
 
     }
 
@@ -89,7 +92,7 @@ public class NoteListActivity extends AppCompatActivity
                 null,
                 null,
                 null,
-                null);
+                NotesContract.NoteEntry.COLUMN_PUBLISHED_DATE + " DESC");
     }
 
     @Override
@@ -104,12 +107,18 @@ public class NoteListActivity extends AppCompatActivity
 
     private void updateUi(Cursor cursor) {
         Double total = calculateTotalPrice(cursor);
-        mInfo.setText(String.format("£%.2f", total));
+        mTotalPerDay.setText(String.format("£%.2f", total));
+
+        cursor.moveToFirst();
+        String date = cursor.getString(cursor.
+                getColumnIndex(NotesContract.NoteEntry.COLUMN_PUBLISHED_DATE));
+        mDate.setText(TextHelper.getDDMMYYYY(date));
     }
 
     private Double calculateTotalPrice(Cursor cursor) {
-        double total = 0;
-        String price;
+        cursor.moveToFirst();
+        String price = cursor.getString(cursor.getColumnIndex(NotesContract.NoteEntry.COLUMN_PRICE));
+        Double total = Double.valueOf(price);
         while (cursor.moveToNext()){
             price = cursor.getString(cursor.getColumnIndex(NotesContract.NoteEntry.COLUMN_PRICE));
             total += Double.valueOf(price);

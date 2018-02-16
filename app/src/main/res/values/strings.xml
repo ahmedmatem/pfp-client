@@ -13,4 +13,6 @@
     <string name="btn_cancel">cancel</string>
     <string name="btn_add_more_notes">add more notes</string>
     <string name="note_successfully_added">Note was added successfully!</string>
+
+    <string name="date_format">dd/MM/YYYY HH:MM</string>
 </resources>
