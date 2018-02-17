@@ -1,6 +1,8 @@
 package com.example.android.pfpnotes.data;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -12,7 +14,7 @@ import android.util.Log;
 public class NotesDbHelper extends SQLiteOpenHelper {
     private static final String TAG = "NotesDbHelper";
     public static final String DATABASE_NAME = "pfpnotes.db";
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 6;
 
     public NotesDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,7 +39,20 @@ public class NotesDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + NotesContract.NoteEntry.TABLE_NAME);
-        onCreate(db);
+//        db.execSQL("DROP TABLE IF EXISTS " + NotesContract.NoteEntry.TABLE_NAME);
+//        onCreate(db);
+        Cursor cursor = db.query(NotesContract.NoteEntry.TABLE_NAME,
+                null, null, null, null, null, null);
+        if(cursor != null) {
+            boolean hasItem = cursor.moveToFirst();
+            int i = 0;
+            while (hasItem) {
+                ContentValues values = new ContentValues();
+                values.put(NotesContract.NoteEntry.COLUMN_PUBLISHED_DATE, "28/01/2018 02:0" + i++);
+                db.update(NotesContract.NoteEntry.TABLE_NAME, values, null, null);
+                hasItem = cursor.moveToNext();
+            }
+            cursor.close();
+        }
     }
 }

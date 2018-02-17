@@ -229,6 +229,7 @@ public class NoteAddActivity extends AppCompatActivity
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.date_format));
         String date = simpleDateFormat.format(new Date());
         values.put(NotesContract.NoteEntry.COLUMN_PUBLISHED_DATE, date);
+        Log.d(TAG, "saveData: " + values);
         new SaveData(this).execute(values);
     }
 

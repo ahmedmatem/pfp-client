@@ -24,7 +24,6 @@ import java.util.ArrayList;
  */
 
 public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final String TAG = "NotesAdapter";
     Context mContext;
     private Cursor mCursor;
     private LayoutInflater mLayoutInflater;
@@ -32,15 +31,16 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public NotesAdapter(Cursor cursor, LayoutInflater layoutInflater, Context context) {
         mCursor = cursor;
-        mData = extractDataFromCursor(mCursor);
+        mData = extractDataFromCursor();
         mLayoutInflater = layoutInflater;
         mContext = context;
-        Log.d(TAG, "NotesAdapter: " + mCursor);
     }
 
-    private ArrayList<Item> extractDataFromCursor(Cursor cursor) {
+    private ArrayList<Item> extractDataFromCursor() {
         if (mCursor != null) {
             mData = new ArrayList<>();
+            int headerPosition = -1;
+            double totalPerDay = 0d;
             String date = "";
             String currentDate;
             while (mCursor.moveToNext()) {
@@ -48,15 +48,25 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         mCursor.getColumnIndex(NotesContract.NoteEntry.COLUMN_PUBLISHED_DATE));
                 currentDate = TextHelper.getDDMMYYYY(currentDate);
                 if (!currentDate.equals(date)) {
+                    if(headerPosition >= 0){
+                        ((HeaderItem) mData.get(headerPosition)).setTotal(totalPerDay);
+                    }
+
                     HeaderItem item = new HeaderItem(currentDate);
                     mData.add(item);
+
+                    headerPosition = mData.size() - 1;
+                    totalPerDay = 0d;
                     date = currentDate;
-                } else {
-                    NoteItem item = new NoteItem(mCursor);
-                    mData.add(item);
                 }
+                NoteItem item = new NoteItem(mCursor);
+                mData.add(item);
+                String totalPerDayAsString = mCursor.getString(
+                        mCursor.getColumnIndex(NotesContract.NoteEntry.COLUMN_PRICE));
+                totalPerDay += Double.valueOf(totalPerDayAsString);
             }
-            Log.d(TAG, "extractDataFromCursor: " + mData.size());
+
+            ((HeaderItem) mData.get(headerPosition)).setTotal(totalPerDay);
             return mData;
         }
 
@@ -86,6 +96,7 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 HeaderItem header = (HeaderItem) mData.get(position);
                 NoteListHeaderViewHolder headerHolder = (NoteListHeaderViewHolder) holder;
                 headerHolder.mDate.setText(header.getDate());
+                headerHolder.mTotal.setText(String.format("£%.2f", header.getTotal()));
                 break;
             case Item.TYPE_NOTE:
                 NoteItem note = (NoteItem) mData.get(position);

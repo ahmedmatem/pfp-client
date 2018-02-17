@@ -6,9 +6,15 @@ package com.example.android.pfpnotes.models;
 
 public class HeaderItem extends Item {
     private String mDate;
+    private Double mTotal;
 
     public HeaderItem(String date) {
         mDate = date;
+    }
+
+    public HeaderItem(String date, Double totalPrice) {
+        this(date);
+        mTotal = totalPrice;
     }
 
     @Override
@@ -18,5 +24,13 @@ public class HeaderItem extends Item {
 
     public String getDate() {
         return mDate;
+    }
+
+    public Double getTotal() {
+        return mTotal;
+    }
+
+    public void setTotal(Double total) {
+        mTotal = total;
     }
 }

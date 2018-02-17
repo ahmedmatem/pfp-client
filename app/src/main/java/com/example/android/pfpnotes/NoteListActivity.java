@@ -116,14 +116,19 @@ public class NoteListActivity extends AppCompatActivity
     }
 
     private Double calculateTotalPrice(Cursor cursor) {
-        cursor.moveToFirst();
-        String price = cursor.getString(cursor.getColumnIndex(NotesContract.NoteEntry.COLUMN_PRICE));
-        Double total = Double.valueOf(price);
-        while (cursor.moveToNext()){
-            price = cursor.getString(cursor.getColumnIndex(NotesContract.NoteEntry.COLUMN_PRICE));
-            total += Double.valueOf(price);
+        if(cursor != null) {
+            boolean hasItem = cursor.moveToFirst();
+            String price;
+            Double total = .0;
+            while (hasItem) {
+                price = cursor.getString(cursor.getColumnIndex(NotesContract.NoteEntry.COLUMN_PRICE));
+                total += Double.valueOf(price);
+                hasItem = cursor.moveToNext();
+            }
+
+            return total;
         }
-        return total;
+        return 0d;
     }
 
     @Override

@@ -12,9 +12,11 @@ import com.example.android.pfpnotes.R;
 
 public class NoteListHeaderViewHolder extends RecyclerView.ViewHolder {
     public TextView mDate;
+    public TextView mTotal;
 
     public NoteListHeaderViewHolder(View itemView) {
         super(itemView);
         mDate = (TextView) itemView.findViewById(R.id.tv_header);
+        mTotal = (TextView) itemView.findViewById(R.id.tv_total_per_day);
     }
 }
