@@ -15,15 +15,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp">
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/tv_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="72dp"
-            android:layout_marginStart="72dp"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -34,11 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="right|end"
-            android:paddingEnd="16dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="16dp"
-            android:paddingStart="8dp"
+            android:gravity="end"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="16sp"
             android:textStyle="bold"

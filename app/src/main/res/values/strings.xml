@@ -15,4 +15,5 @@
     <string name="note_successfully_added">Note was added successfully!</string>
 
     <string name="date_format">dd/MM/YYYY HH:MM</string>
+    <string name="text_view">TextView</string>
 </resources>

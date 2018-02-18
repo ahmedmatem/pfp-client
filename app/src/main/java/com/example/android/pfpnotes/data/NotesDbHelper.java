@@ -41,6 +41,8 @@ public class NotesDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 //        db.execSQL("DROP TABLE IF EXISTS " + NotesContract.NoteEntry.TABLE_NAME);
 //        onCreate(db);
+
+        // TODO update version 6: change all date starts with 47 -> 16, with 46 -> 15
         Cursor cursor = db.query(NotesContract.NoteEntry.TABLE_NAME,
                 null, null, null, null, null, null);
         if(cursor != null) {
